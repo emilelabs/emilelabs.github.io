@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Math Grid — The 100-Square Math Drill, Reimagined | Emile Labs</title>
+  <meta name="description" content="Math Grid brings the classic Japanese 100-square calculation drill (hyakumasu keisan) to iPad and iPhone. Adaptive difficulty, offline battles, family leaderboards — 100% offline and private. For ages 5-7+.">
+  <meta property="og:title" content="Math Grid — The 100-Square Math Drill, Reimagined">
+  <meta property="og:description" content="The classic Japanese hyakumasu keisan drill, digitised with adaptive difficulty and offline battles. 100% private — no accounts, no ads, no data leaves the device.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://emilelabs.github.io/mathgrid/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Quicksand', -apple-system, sans-serif;
+      color: #1E1A37;
+      background: #FAF6EE;
+      font-weight: 500;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4 { font-weight: 700; line-height: 1.2; color: #1E1A37; }
+    h2 { font-size: 2rem; margin-bottom: 12px; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 80px 0; }
+
+    /* ── Animations ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(250, 246, 238, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(91, 127, 231, 0.15);
+    }
+
+    nav .container {
+      display: flex; align-items: center; justify-content: space-between; height: 64px;
+    }
+
+    .nav-logo {
+      font-size: 1.15rem; font-weight: 700; color: #1E1A37;
+      text-decoration: none; display: flex; align-items: center; gap: 10px;
+    }
+
+    /* 2×2 grid logo mark */
+    .logo-grid {
+      display: grid; grid-template-columns: repeat(2, 13px); grid-template-rows: repeat(2, 13px);
+      gap: 2px; flex-shrink: 0;
+    }
+
+    .logo-grid span {
+      width: 13px; height: 13px; border-radius: 3.5px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 700; line-height: 1;
+    }
+
+    .logo-grid span:nth-child(1) { background: #5B7FE7; color: #fff; }
+    .logo-grid span:nth-child(2) { background: #fff; color: #1E1A37; box-shadow: inset 0 0 0 1px rgba(30,26,55,0.15); }
+    .logo-grid span:nth-child(3) { background: #E6EBFB; color: #5B7FE7; }
+    .logo-grid span:nth-child(4) { background: #FF9B43; color: #fff; font-size: 8px; }
+
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+
+    .nav-links a {
+      text-decoration: none; color: #4a4665; font-weight: 600; font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: #5B7FE7; }
+
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
+    .nav-toggle span { display: block; width: 22px; height: 2px; background: #1E1A37; margin: 5px 0; transition: 0.3s; border-radius: 2px; }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 130px 0 80px;
+      background: linear-gradient(175deg, #EEF2FD 0%, #E6EBFB 30%, #EAF0FC 60%, #F4F4F6 85%, #FAF6EE 100%);
+      position: relative; overflow: hidden;
+    }
+
+    .hero-blob {
+      position: absolute; border-radius: 50%; z-index: 0;
+    }
+
+    .hero .hb1 { width: 500px; height: 500px; background: rgba(91,127,231,0.08); top: -100px; right: -100px; }
+    .hero .hb2 { width: 350px; height: 350px; background: rgba(255,155,67,0.1); bottom: -50px; left: -80px; }
+
+    /* Faded grid decoration */
+    .hero-grid-deco {
+      position: absolute; z-index: 0; display: grid; gap: 8px;
+      grid-template-columns: repeat(3, 22px);
+    }
+
+    .hero-grid-deco .hg { width: 22px; height: 22px; border-radius: 6px; opacity: 0.1; }
+
+    .hero .deco-1 { top: 140px; left: 60px; }
+    .hero .deco-1 .hg { background: #5B7FE7; }
+    .hero .deco-2 { bottom: 120px; right: 80px; grid-template-columns: repeat(2, 22px); }
+    .hero .deco-2 .hg { background: #6B5CE7; }
+
+    .hero .container {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+      position: relative; z-index: 1;
+    }
+
+    .hero-content { max-width: 520px; }
+
+    .hero-eyebrow {
+      display: inline-block; font-size: 0.85rem; font-weight: 700;
+      color: #5B7FE7; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px;
+    }
+
+    .hero h1 { font-size: 2.8rem; margin-bottom: 12px; letter-spacing: -0.01em; color: #1E1A37; }
+
+    .hero .tagline { font-size: 1.15rem; color: #4a4665; font-weight: 600; margin-bottom: 16px; }
+
+    .hero p.desc {
+      font-size: 1.05rem; color: #555170; margin-bottom: 32px; line-height: 1.7;
+    }
+
+    .hero-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #5B7FE7; color: #fff;
+      font-family: 'Quicksand', sans-serif; font-size: 1rem; font-weight: 700;
+      padding: 14px 28px; border: none; border-radius: 50px; cursor: pointer;
+      text-decoration: none; transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-primary:hover { background: #4a6cd4; transform: translateY(-1px); }
+    .btn-primary svg { width: 20px; height: 20px; }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; color: #1E1A37;
+      font-family: 'Quicksand', sans-serif; font-size: 1rem; font-weight: 700;
+      padding: 14px 28px; border: 2px solid rgba(30,26,55,0.3); border-radius: 50px;
+      cursor: pointer; text-decoration: none; transition: background 0.2s, border-color 0.2s;
+    }
+
+    .btn-secondary:hover { background: rgba(30,26,55,0.06); border-color: rgba(30,26,55,0.5); }
+
+    /* Coming-soon (disabled) button */
+    .btn-disabled {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(30,26,55,0.08); color: #8a87a0;
+      font-family: 'Quicksand', sans-serif; font-size: 1rem; font-weight: 700;
+      padding: 14px 28px; border: none; border-radius: 50px;
+      cursor: default; text-decoration: none; pointer-events: none;
+    }
+
+    .btn-disabled svg { width: 20px; height: 20px; opacity: 0.6; }
+
+    /* ── Phone mockup in hero (pure CSS grid screen) ── */
+    .hero-visual { display: flex; justify-content: center; align-items: center; }
+
+    .phone-mockup {
+      width: 280px; height: 570px; background: #f0ede6; border-radius: 40px; padding: 10px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5), 0 0 0 2px #ddd8ce,
+                  0 20px 50px rgba(30,26,55,0.12), 0 40px 80px rgba(30,26,55,0.06);
+      position: relative; transform: rotate(-3deg);
+    }
+
+    .phone-screen {
+      width: 100%; height: 100%; border-radius: 32px; overflow: hidden; background: #FAF6EE;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 18px; padding: 20px 14px;
+    }
+
+    .phone-notch {
+      position: absolute; top: 18px; left: 50%; transform: translateX(-50%);
+      width: 80px; height: 22px; background: #2c2c2e; border-radius: 12px; z-index: 3;
+    }
+
+    .screen-title { font-size: 0.95rem; font-weight: 700; color: #1E1A37; letter-spacing: 0.5px; }
+    .screen-timer {
+      font-size: 0.8rem; font-weight: 700; color: #5B7FE7;
+      background: #E6EBFB; padding: 4px 14px; border-radius: 20px;
+    }
+
+    .mini-grid {
+      display: grid; grid-template-columns: repeat(6, 36px); grid-template-rows: repeat(6, 36px);
+      gap: 3px;
+    }
+
+    .mini-grid .cell {
+      border-radius: 7px; display: flex; align-items: center; justify-content: center;
+      font-size: 0.82rem; font-weight: 700; background: #fff;
+      box-shadow: inset 0 0 0 1px rgba(30,26,55,0.08); color: #1E1A37;
+    }
+
+    .mini-grid .op { background: #5B7FE7; color: #fff; box-shadow: none; font-size: 1rem; }
+    .mini-grid .head { background: #E6EBFB; color: #5B7FE7; box-shadow: none; }
+    .mini-grid .done { background: #fff; color: #1E1A37; }
+    .mini-grid .active { background: #FF9B43; color: #fff; box-shadow: none; }
+    .mini-grid .empty { background: rgba(255,255,255,0.6); }
+
+    .screen-stars { font-size: 1rem; letter-spacing: 4px; }
+
+    /* ── Section headers ── */
+    .section-header { text-align: center; max-width: 580px; margin: 0 auto 48px; }
+    .section-header p { color: #555170; font-size: 1.05rem; margin-top: 8px; }
+    .section-eyebrow {
+      font-size: 0.8rem; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase;
+      color: #5B7FE7; margin-bottom: 10px; display: block;
+    }
+
+    /* ── Features ── */
+    .features { background: #FAF6EE; }
+
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+    .feature-card {
+      background: #fff; border: 1px solid rgba(91,127,231,0.18); border-radius: 16px;
+      padding: 28px; box-shadow: 0 2px 8px rgba(30,26,55,0.04);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .feature-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(30,26,55,0.08); }
+
+    .feature-icon { font-size: 2rem; margin-bottom: 12px; display: block; }
+    .feature-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
+    .feature-card p { color: #555170; font-size: 0.9rem; line-height: 1.6; }
+
+    /* ── How it works ── */
+    .how-it-works {
+      background: linear-gradient(175deg, #F0EDFC 0%, #E9E4FA 40%, #EEEAFB 70%, #F8F5F0 100%);
+      position: relative; overflow: hidden;
+    }
+
+    .how-blob {
+      position: absolute; border-radius: 50%; z-index: 0;
+    }
+
+    .how-it-works .hwb1 { width: 400px; height: 400px; background: rgba(107,92,231,0.08); top: -80px; left: -100px; }
+    .how-it-works .hwb2 { width: 300px; height: 300px; background: rgba(91,127,231,0.08); bottom: -60px; right: -80px; }
+
+    .how-it-works .container { position: relative; z-index: 1; }
+    .how-it-works h2 { color: #1E1A37; }
+    .how-it-works .section-header p { color: #555170; }
+
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; text-align: center; }
+
+    .step { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+
+    .step-number {
+      width: 52px; height: 52px; background: #6B5CE7; color: #fff; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; font-weight: 700;
+    }
+
+    .step-visual { font-size: 2.8rem; line-height: 1; }
+    .step h3 { font-size: 1.1rem; color: #1E1A37; }
+    .step p { color: #555170; font-size: 0.93rem; }
+
+    /* ── Benefits ── */
+    .benefits {
+      background: linear-gradient(175deg, #ECFAF3 0%, #E4F8EE 40%, #EBFAF1 70%, #FAF8F0 100%);
+      position: relative; overflow: hidden;
+    }
+
+    .benefits-blob { position: absolute; border-radius: 50%; z-index: 0; }
+    .benefits .bb1 { width: 450px; height: 450px; background: rgba(52,211,153,0.08); top: -80px; right: -120px; }
+
+    .benefits .container { position: relative; z-index: 1; }
+    .benefits h2 { color: #1E1A37; }
+    .benefits .section-header p { color: #3d7a5e; }
+
+    .privacy-banner {
+      background: #1E1A37; color: #fff; border-radius: 16px;
+      padding: 24px 28px; margin-bottom: 24px;
+      display: flex; gap: 18px; align-items: flex-start;
+      box-shadow: 0 4px 20px rgba(30,26,55,0.15);
+    }
+
+    .privacy-banner .benefit-icon { font-size: 1.8rem; flex-shrink: 0; }
+    .privacy-banner h3 { color: #fff; font-weight: 700; margin-bottom: 4px; }
+    .privacy-banner p { color: rgba(255,255,255,0.8); font-size: 0.9rem; }
+    .privacy-banner strong { color: #34D399; }
+
+    .benefits-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+
+    .benefit-card {
+      background: rgba(255,255,255,0.7); border: 1px solid rgba(52,211,153,0.2);
+      border-radius: 16px; padding: 28px; display: flex; gap: 18px; align-items: flex-start;
+      box-shadow: 0 2px 8px rgba(30,80,60,0.04);
+      backdrop-filter: blur(8px);
+    }
+
+    .benefit-icon { font-size: 1.8rem; flex-shrink: 0; }
+    .benefit-card h3 { font-weight: 700; margin-bottom: 4px; color: #1E1A37; }
+    .benefit-card p { color: #4a6e5c; font-size: 0.9rem; }
+
+    /* ── Pricing ── */
+    .pricing {
+      background: linear-gradient(175deg, #FDF3E8 0%, #FBEEDF 40%, #FCF2E8 70%, #FAF6EE 100%);
+    }
+
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+      max-width: 880px; margin: 0 auto;
+    }
+
+    .price-card {
+      background: #fff; border: 1px solid rgba(91,127,231,0.18); border-radius: 16px;
+      padding: 32px 24px; text-align: center;
+      box-shadow: 0 2px 8px rgba(30,26,55,0.04);
+      display: flex; flex-direction: column; position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .price-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(30,26,55,0.08); }
+
+    .price-card.featured {
+      border: 2px solid #5B7FE7;
+      box-shadow: 0 4px 20px rgba(91,127,231,0.15);
+    }
+
+    .price-card.featured .popular-badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: #5B7FE7; color: #fff; font-size: 0.75rem; font-weight: 700;
+      padding: 4px 18px; border-radius: 20px; white-space: nowrap;
+    }
+
+    .price-card h3 { font-size: 1.1rem; margin-bottom: 4px; }
+
+    .price-card .price {
+      font-size: 2.2rem; font-weight: 700; color: #1E1A37; margin: 10px 0 4px;
+    }
+
+    .price-card .price-free {
+      font-size: 2.2rem; font-weight: 700; color: #34D399; margin: 10px 0 4px;
+    }
+
+    .price-card .price-period { font-size: 0.85rem; color: #6e6a85; margin-bottom: 16px; }
+    .price-card .price-note { font-size: 0.8rem; color: #34D399; font-weight: 700; margin-bottom: 14px; }
+
+    .price-features { list-style: none; text-align: left; margin-bottom: 24px; flex-grow: 1; }
+
+    .price-features li {
+      font-size: 0.88rem; color: #4a4665; padding: 5px 0;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .price-features li::before {
+      content: ""; display: inline-block; width: 18px; height: 18px; flex-shrink: 0;
+      background: #34D399; border-radius: 50%;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: center;
+    }
+
+    .price-card .btn-disabled {
+      width: 100%; justify-content: center; padding: 12px 24px; font-size: 0.9rem;
+    }
+
+    /* ── CTA ── */
+    .cta {
+      background: linear-gradient(175deg, #E6EBFB 0%, #DDE5F9 50%, #EAF0FC 100%);
+      text-align: center; padding: 80px 0;
+      position: relative; overflow: hidden;
+    }
+
+    .cta-blob { position: absolute; border-radius: 50%; z-index: 0; }
+    .cta .cb1 { width: 400px; height: 400px; background: rgba(91,127,231,0.1); top: -80px; right: -100px; }
+    .cta .cb2 { width: 300px; height: 300px; background: rgba(255,155,67,0.1); bottom: -60px; left: -80px; }
+
+    .cta .container { position: relative; z-index: 1; }
+    .cta h2 { color: #1E1A37; font-size: 2rem; margin-bottom: 12px; }
+    .cta p { color: #4a4665; font-size: 1.05rem; margin-bottom: 32px; max-width: 480px; margin-left: auto; margin-right: auto; }
+
+    .cta .btn-disabled { font-size: 1.1rem; padding: 16px 32px; background: rgba(30,26,55,0.1); }
+
+    /* ── Footer ── */
+    footer {
+      background: #1E1A37; color: rgba(255,255,255,0.7); padding: 48px 0 28px;
+    }
+
+    .footer-content { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; margin-bottom: 28px; }
+
+    .footer-brand h4 { color: #fff; font-size: 1.1rem; margin-bottom: 8px; }
+    .footer-brand p { font-size: 0.88rem; line-height: 1.6; }
+    .footer-brand a { color: #FF9B43; text-decoration: none; }
+    .footer-brand a:hover { text-decoration: underline; }
+
+    .footer-links h4 { color: #fff; font-size: 0.9rem; margin-bottom: 10px; }
+    .footer-links ul { list-style: none; }
+    .footer-links li { margin-bottom: 6px; }
+    .footer-links a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+    .footer-links a:hover { color: #FF9B43; }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;
+      display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem;
+    }
+
+    .footer-bottom a { color: rgba(255,255,255,0.45); text-decoration: none; }
+    .footer-bottom a:hover { color: #FF9B43; }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      h2 { font-size: 1.6rem; }
+      .hero .container { grid-template-columns: 1fr; text-align: center; }
+      .hero h1 { font-size: 2.2rem; }
+      .hero-content { max-width: 100%; }
+      .hero-actions { justify-content: center; }
+      .phone-mockup { width: 250px; height: 510px; transform: rotate(0); }
+      .mini-grid { grid-template-columns: repeat(6, 32px); grid-template-rows: repeat(6, 32px); }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .steps { grid-template-columns: 1fr; gap: 36px; max-width: 380px; margin: 0 auto; }
+      .benefits-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 380px; }
+      .footer-content { grid-template-columns: 1fr; gap: 28px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+    }
+
+    @media (max-width: 600px) {
+      section { padding: 56px 0; }
+      .hero { padding: 110px 0 56px; }
+      .hero h1 { font-size: 1.85rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .privacy-banner { flex-direction: column; gap: 10px; }
+      .nav-links {
+        display: none; position: absolute; top: 64px; left: 0; right: 0;
+        background: rgba(250,246,238,0.98); flex-direction: column;
+        padding: 16px 24px 24px; gap: 14px; border-bottom: 1px solid rgba(91,127,231,0.15);
+      }
+      .nav-links.open { display: flex; }
+      .nav-toggle { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="container">
+      <a href="#" class="nav-logo">
+        <span class="logo-grid">
+          <span>&#65291;</span><span>3</span><span>7</span><span>&#9733;</span>
+        </span>
+        Math Grid
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#benefits">For Parents</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-blob hb1"></div>
+      <div class="hero-blob hb2"></div>
+      <div class="hero-grid-deco deco-1">
+        <div class="hg"></div><div class="hg"></div><div class="hg"></div>
+        <div class="hg"></div><div class="hg"></div><div class="hg"></div>
+        <div class="hg"></div><div class="hg"></div><div class="hg"></div>
+      </div>
+      <div class="hero-grid-deco deco-2">
+        <div class="hg"></div><div class="hg"></div>
+        <div class="hg"></div><div class="hg"></div>
+      </div>
+      <div class="container">
+        <div class="hero-content fade-in">
+          <span class="hero-eyebrow">The Classic Japanese Math Drill</span>
+          <h1>The 100-Square Drill, Reimagined for Little Hands</h1>
+          <p class="tagline">百ます計算 — hyakumasu keisan — meets gentle, adaptive play</p>
+          <p class="desc">An operation in the corner, numbers across the top and down the side — your child fills every cell. Math Grid digitises the time-honoured Japanese 100-square calculation drill with adaptive difficulty, offline battles and family leaderboards. For ages 5–7 and up.</p>
+          <div class="hero-actions">
+            <span class="btn-disabled" aria-disabled="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+              Coming soon to the App Store
+            </span>
+            <a href="#how-it-works" class="btn-secondary">See How It Works</a>
+          </div>
+        </div>
+        <div class="hero-visual fade-in">
+          <div class="phone-mockup">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+              <div class="screen-title">5 &times; 5 &middot; Addition</div>
+              <div class="screen-timer">&#9201; 0:42</div>
+              <div class="mini-grid" aria-hidden="true">
+                <div class="cell op">&#65291;</div>
+                <div class="cell head">3</div><div class="cell head">7</div><div class="cell head">2</div><div class="cell head">9</div><div class="cell head">5</div>
+                <div class="cell head">4</div>
+                <div class="cell done">7</div><div class="cell done">11</div><div class="cell done">6</div><div class="cell done">13</div><div class="cell done">9</div>
+                <div class="cell head">8</div>
+                <div class="cell done">11</div><div class="cell done">15</div><div class="cell done">10</div><div class="cell done">17</div><div class="cell done">13</div>
+                <div class="cell head">1</div>
+                <div class="cell done">4</div><div class="cell done">8</div><div class="cell active">?</div><div class="cell empty"></div><div class="cell empty"></div>
+                <div class="cell head">6</div>
+                <div class="cell empty"></div><div class="cell empty"></div><div class="cell empty"></div><div class="cell empty"></div><div class="cell empty"></div>
+                <div class="cell head">2</div>
+                <div class="cell empty"></div><div class="cell empty"></div><div class="cell empty"></div><div class="cell empty"></div><div class="cell empty"></div>
+              </div>
+              <div class="screen-stars">&#11088;&#11088;&#11088;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+      <div class="container">
+        <div class="section-header fade-in">
+          <span class="section-eyebrow">Everything They Need</span>
+          <h2>One Grid, Endless Practice</h2>
+          <p>From a gentle 3&times;3 start to the legendary 100-square — Math Grid grows with your child.</p>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card fade-in">
+            <span class="feature-icon">&#10133;</span>
+            <h3>Four Operations, Four Grid Sizes</h3>
+            <p>Addition, subtraction, multiplication and division across 3&times;3, 4&times;4, 5&times;5 and the full 10&times;10 — the classic 100-square.</p>
+          </div>
+          <div class="feature-card fade-in">
+            <span class="feature-icon">&#129668;</span>
+            <h3>Auto Adaptive Difficulty</h3>
+            <p>Levels up after two strong rounds and gently adjusts down when needed — never framed as failure, always the right challenge.</p>
+          </div>
+          <div class="feature-card fade-in">
+            <span class="feature-icon">&#9876;&#65039;</span>
+            <h3>Offline Battle Mode</h3>
+            <p>Challenge a friend with a shareable 12-character secret code. Both play the identical grid, fastest time wins — then challenge back for a rematch. No internet needed.</p>
+          </div>
+          <div class="feature-card fade-in">
+            <span class="feature-icon">&#129489;&#8205;&#129309;&#8205;&#129489;</span>
+            <h3>Profiles &amp; Family Leaderboard</h3>
+            <p>Every player gets their own avatar and colour. The family leaderboard celebrates star champions and the fastest fingers in the house.</p>
+          </div>
+          <div class="feature-card fade-in">
+            <span class="feature-icon">&#128293;</span>
+            <h3>Heatmap &amp; Smart Practice</h3>
+            <p>A GitHub-style heatmap shows practice day by day, while facts a child keeps missing quietly reappear until they're mastered.</p>
+          </div>
+          <div class="feature-card fade-in">
+            <span class="feature-icon">&#127881;</span>
+            <h3>Joyful by Design</h3>
+            <p>Stars, streaks, confetti, gentle sounds and haptics make every round feel like a celebration, not a test.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+      <div class="how-blob hwb1"></div>
+      <div class="how-blob hwb2"></div>
+      <div class="container">
+        <div class="section-header fade-in">
+          <span class="section-eyebrow">Simple as 1, 2, 3</span>
+          <h2>How the 100-Square Works</h2>
+          <p>The drill that generations of Japanese schoolchildren grew up with — three steps to math fluency.</p>
+        </div>
+        <div class="steps">
+          <div class="step fade-in">
+            <div class="step-number">1</div>
+            <div class="step-visual">&#127919;</div>
+            <h3>Pick an Operation &amp; Grid</h3>
+            <p>Choose + &minus; &times; or &divide; and a grid size — or let &#129668; Auto pick the perfect level automatically.</p>
+          </div>
+          <div class="step fade-in">
+            <div class="step-number">2</div>
+            <div class="step-visual">&#9999;&#65039;</div>
+            <h3>Fill Every Cell</h3>
+            <p>Numbers run across the top and down the side. Your child combines them with the corner operation and fills the whole grid.</p>
+          </div>
+          <div class="step fade-in">
+            <div class="step-number">3</div>
+            <div class="step-visual">&#127942;</div>
+            <h3>Beat the Clock, Level Up</h3>
+            <p>Earn stars, build streaks and watch the heatmap fill in. Two strong rounds and the difficulty steps up on its own.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Benefits for Parents -->
+    <section class="benefits" id="benefits">
+      <div class="benefits-blob bb1"></div>
+      <div class="container">
+        <div class="section-header fade-in">
+          <span class="section-eyebrow">Made for Parents Too</span>
+          <h2>Truly Private. Genuinely Offline.</h2>
+          <p>Built for the Kids Category — and built to keep your family's data exactly where it belongs.</p>
+        </div>
+        <div class="privacy-banner fade-in">
+          <div class="benefit-icon">&#128274;</div>
+          <div>
+            <h3>100% Offline — Nothing Ever Leaves the Device</h3>
+            <p><strong>No accounts. No ads. No third-party analytics. No data collection.</strong> Even Battle mode is offline — battle codes are just 12 characters typed between friends, never sent over a network. COPPA-conscious by design.</p>
+          </div>
+        </div>
+        <div class="benefits-grid">
+          <div class="benefit-card fade-in">
+            <div class="benefit-icon">&#128737;&#65039;</div>
+            <div>
+              <h3>Parental Gates Everywhere</h3>
+              <p>An adult challenge protects the parent dashboard, all purchases, external links and sharing — kids stay safely inside the game.</p>
+            </div>
+          </div>
+          <div class="benefit-card fade-in">
+            <div class="benefit-icon">&#128202;</div>
+            <div>
+              <h3>A Real Parent Dashboard</h3>
+              <p>Set per-operation levels, review accuracy charts, see the list of tricky facts your child is working on, and browse the session log.</p>
+            </div>
+          </div>
+          <div class="benefit-card fade-in">
+            <div class="benefit-icon">&#127757;</div>
+            <div>
+              <h3>Speaks Your Language</h3>
+              <p>English UI localised into Japanese, Chinese (Simplified), Korean, Spanish, Portuguese (BR), French and German.</p>
+            </div>
+          </div>
+          <div class="benefit-card fade-in">
+            <div class="benefit-icon">&#127793;</div>
+            <div>
+              <h3>Encouragement, Not Pressure</h3>
+              <p>Auto difficulty adjusts down gently and never frames it as failure. Stars and streaks reward showing up, not just speed.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+      <div class="container">
+        <div class="section-header fade-in">
+          <span class="section-eyebrow">Simple Pricing</span>
+          <h2>Start Free, Grow with Them</h2>
+          <p>The full four-operation drill is free. Upgrade when your child is ready for the 100-square.</p>
+        </div>
+        <div class="pricing-grid">
+          <div class="price-card fade-in">
+            <h3>Free</h3>
+            <div class="price-free">$0</div>
+            <div class="price-period">forever</div>
+            <ul class="price-features">
+              <li>3&times;3 &amp; 4&times;4 grids</li>
+              <li>All four operations</li>
+              <li>&#129668; Auto adaptive mode</li>
+              <li>Offline battles</li>
+              <li>Up to 3 profiles</li>
+            </ul>
+            <span class="btn-disabled" aria-disabled="true">Coming Soon</span>
+          </div>
+          <div class="price-card featured fade-in">
+            <span class="popular-badge">Most Popular</span>
+            <h3>Premium Annual</h3>
+            <div class="price">$24.99</div>
+            <div class="price-period">per year</div>
+            <div class="price-note">Save 30% vs monthly</div>
+            <ul class="price-features">
+              <li>Everything in Free</li>
+              <li>All grid sizes</li>
+              <li>The full 100-square (10&times;10)</li>
+              <li>Manual level picking</li>
+              <li>Premium avatars</li>
+            </ul>
+            <span class="btn-disabled" aria-disabled="true">Coming Soon</span>
+          </div>
+          <div class="price-card fade-in">
+            <h3>Family</h3>
+            <div class="price">$29.99</div>
+            <div class="price-period">per year</div>
+            <div class="price-note">Up to 6 player profiles</div>
+            <ul class="price-features">
+              <li>Everything in Premium</li>
+              <li>Up to 6 player profiles</li>
+              <li>Family Sharing</li>
+            </ul>
+            <span class="btn-disabled" aria-disabled="true">Coming Soon</span>
+          </div>
+        </div>
+        <p style="text-align:center; color:#6e6a85; font-size:0.82rem; margin-top:20px;">Also available: Monthly Premium at $2.99/month.</p>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+      <div class="cta-blob cb1"></div>
+      <div class="cta-blob cb2"></div>
+      <div class="container fade-in">
+        <h2>One Grid a Day Keeps Math Fear Away</h2>
+        <p>Math Grid is in the final stretch of development. It will arrive on the App Store soon — completely private, completely offline.</p>
+        <span class="btn-disabled" aria-disabled="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          Coming soon to the App Store
+        </span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <h4>Math Grid by Emile Labs</h4>
+          <p>The classic 100-square calculation drill, reimagined for little hands. Made with care in Melbourne, Australia.</p>
+          <p style="margin-top:8px;">Also from Emile Labs: <a href="/">DotsCard</a></p>
+        </div>
+        <div class="footer-links">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="/mathgrid/privacy">Privacy Policy</a></li>
+            <li><a href="/mathgrid/terms">Terms of Use</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="mailto:support@emilelabs.com">support@emilelabs.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Emile Labs, Melbourne. All rights reserved.</span>
+        <a href="#">Back to top</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    document.getElementById('navToggle').addEventListener('click', () => {
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+
+    document.querySelectorAll('#navLinks a').forEach(link => {
+      link.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+    });
+  </script>
+
+</body>
+</html>
