@@ -185,7 +185,7 @@
         repeating-linear-gradient(90deg, rgba(30,26,55,0.035) 0 1px, transparent 1px 22px),
         #FAF6EE;
       display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-      gap: 13px; padding: 30px 16px 16px;
+      gap: 9px; padding: 46px 16px 16px;   /* top padding clears the Dynamic Island */
     }
 
     .phone-notch {
@@ -202,27 +202,27 @@
 
     /* Connected masu grid (shared gridlines), not separated tiles */
     .game-grid {
-      display: grid; grid-template-columns: repeat(6, 38px); grid-template-rows: repeat(6, 38px);
+      display: grid; grid-template-columns: repeat(6, 30px); grid-template-rows: repeat(6, 30px);
       background: #fff; border-radius: 14px; overflow: hidden;
       border: 1.5px solid rgba(30,26,55,0.12);
       box-shadow: 0 6px 18px rgba(30,26,55,0.07);
     }
     .gc {
       display: flex; align-items: center; justify-content: center;
-      font-size: 0.82rem; font-weight: 700; color: #1E1A37;
+      font-size: 0.72rem; font-weight: 700; color: #1E1A37;
       border-right: 1px solid rgba(30,26,55,0.07); border-bottom: 1px solid rgba(30,26,55,0.07);
     }
-    .gc.op { background: #3D6BF0; color: #fff; font-size: 1.05rem; }
+    .gc.op { background: #3D6BF0; color: #fff; font-size: 0.95rem; }
     .gc.head { background: #E6EBFB; color: #3D6BF0; }
     .gc.active { background: #FF9B43; color: #fff; }
 
     .game-problem { font-size: 1.25rem; font-weight: 700; color: #1E1A37; }
     .game-problem .blank { color: #3D6BF0; }
 
-    .game-pad { display: grid; grid-template-columns: repeat(3, 58px); gap: 7px; margin-top: 2px; }
+    .game-pad { display: grid; grid-template-columns: repeat(3, 54px); gap: 6px; margin-top: 2px; }
     .pk {
-      background: #fff; border-radius: 11px; padding: 9px 0; text-align: center;
-      font-weight: 700; font-size: 0.9rem; color: #1E1A37;
+      background: #fff; border-radius: 10px; padding: 7px 0; text-align: center;
+      font-weight: 700; font-size: 0.85rem; color: #1E1A37;
       box-shadow: 0 1px 3px rgba(30,26,55,0.10);
     }
     .pk.del { background: #FBE9E9; color: #E66B6B; }
@@ -435,8 +435,8 @@
       .hero-content { max-width: 100%; }
       .hero-actions { justify-content: center; }
       .phone-mockup { width: 250px; height: 510px; transform: rotate(0); }
-      .game-grid { grid-template-columns: repeat(6, 34px); grid-template-rows: repeat(6, 34px); }
-      .game-pad { grid-template-columns: repeat(3, 52px); }
+      .game-grid { grid-template-columns: repeat(6, 28px); grid-template-rows: repeat(6, 28px); }
+      .game-pad { grid-template-columns: repeat(3, 50px); }
       .features-grid { grid-template-columns: repeat(2, 1fr); }
       .steps { grid-template-columns: 1fr; gap: 36px; max-width: 380px; margin: 0 auto; }
       .benefits-grid { grid-template-columns: 1fr; }
@@ -539,6 +539,8 @@
               <div class="game-problem">3 &#65291; 9 = <span class="blank">__</span></div>
               <div class="game-pad" aria-hidden="true">
                 <span class="pk">1</span><span class="pk">2</span><span class="pk">3</span>
+                <span class="pk">4</span><span class="pk">5</span><span class="pk">6</span>
+                <span class="pk">7</span><span class="pk">8</span><span class="pk">9</span>
                 <span class="pk del">&#9003;</span><span class="pk">0</span><span class="pk ok">&#10003;</span>
               </div>
             </div>
