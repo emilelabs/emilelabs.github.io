@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Idea Board — Math Grid | Emile Labs</title>
+  <meta name="description" content="Share your ideas for Math Grid and vote on what you'd like to see next. No account needed.">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Math Grid — Idea Board">
+  <meta property="og:description" content="Tell us what to build next. Post an idea, upvote others — no sign-in required.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://emilelabs.github.io/mathgrid/ideas/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Quicksand', -apple-system, sans-serif;
+      color: #1E1A37; background: #FAF6EE; font-weight: 500; line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3 { font-weight: 700; line-height: 1.2; color: #1E1A37; }
+    a { color: #5B7FE7; }
+    .container { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+
+    /* Nav */
+    nav { position: sticky; top: 0; z-index: 50; background: rgba(250,246,238,0.9);
+          backdrop-filter: blur(10px); border-bottom: 1px solid rgba(30,26,55,0.07); }
+    nav .container { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.1rem;
+                color: #1E1A37; text-decoration: none; }
+    .logo-grid { display: grid; grid-template-columns: repeat(2, 1fr); width: 26px; height: 26px;
+                 border: 2px solid #5B7FE7; border-radius: 6px; overflow: hidden; }
+    .logo-grid span { display: flex; align-items: center; justify-content: center; font-size: 9px;
+                      font-weight: 700; color: #5B7FE7; background: #fff; }
+    .nav-back { font-size: 0.92rem; font-weight: 600; color: #5B7FE7; text-decoration: none; }
+    .nav-back:hover { text-decoration: underline; }
+
+    /* Header */
+    header.hero { text-align: center; padding: 56px 0 32px; }
+    header.hero h1 { font-size: 2.2rem; margin-bottom: 10px; }
+    header.hero p { color: #555170; max-width: 520px; margin: 0 auto; }
+    .pill { display: inline-block; background: #E6EBFB; color: #4a6cd4; font-weight: 600;
+            font-size: 0.8rem; padding: 5px 14px; border-radius: 50px; margin-bottom: 16px; }
+
+    /* Compose card */
+    .card { background: #fff; border-radius: 18px; padding: 22px; box-shadow: 0 6px 24px rgba(30,26,55,0.06);
+            border: 1px solid rgba(30,26,55,0.05); }
+    .compose { margin-bottom: 14px; }
+    textarea#idea { width: 100%; border: 1.5px solid rgba(30,26,55,0.15); border-radius: 12px;
+            padding: 14px; font-family: inherit; font-size: 1rem; font-weight: 500; color: #1E1A37;
+            resize: vertical; min-height: 64px; background: #FAF9F5; }
+    textarea#idea:focus { outline: none; border-color: #5B7FE7; background: #fff; }
+    .compose-row { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; gap: 12px; }
+    .counter { font-size: 0.82rem; color: #8a87a0; font-variant-numeric: tabular-nums; }
+    .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: #5B7FE7; color: #fff;
+            font-family: inherit; font-size: 0.98rem; font-weight: 700; padding: 12px 24px; border: none;
+            border-radius: 50px; cursor: pointer; text-decoration: none; transition: background 0.2s, transform 0.15s; }
+    .btn-primary:hover:not(:disabled) { background: #4a6cd4; transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    /* Honeypot — hidden from humans, catches bots */
+    .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+    .note { font-size: 0.82rem; color: #8a87a0; text-align: center; margin: 14px 0 6px; }
+    .status { text-align: center; font-size: 0.9rem; font-weight: 600; min-height: 22px; margin: 8px 0; }
+    .status.ok { color: #129668; } .status.err { color: #D9534F; }
+
+    /* Banner (not configured / offline) */
+    .banner { background: #FFF3E2; border: 1px solid #FFD9A8; color: #8a5a1a; border-radius: 14px;
+              padding: 16px 18px; font-size: 0.92rem; margin-bottom: 20px; }
+    .banner strong { color: #6e4410; }
+
+    /* Ideas list */
+    .ideas { margin-top: 22px; display: flex; flex-direction: column; gap: 12px; }
+    .idea { display: flex; align-items: flex-start; gap: 14px; }
+    .vote { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 2px;
+            min-width: 56px; padding: 10px 6px; border-radius: 12px; border: 1.5px solid rgba(30,26,55,0.12);
+            background: #fff; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .vote:hover:not(:disabled) { border-color: #5B7FE7; transform: translateY(-1px); }
+    .vote:disabled { cursor: default; }
+    .vote.voted { background: #E6EBFB; border-color: #5B7FE7; }
+    .vote .arrow { font-size: 1rem; line-height: 1; }
+    .vote .count { font-weight: 700; font-size: 1.05rem; color: #1E1A37; font-variant-numeric: tabular-nums; }
+    .idea-body { flex: 1; padding-top: 4px; }
+    .idea-text { font-weight: 600; color: #1E1A37; word-break: break-word; }
+    .idea-meta { font-size: 0.78rem; color: #8a87a0; margin-top: 3px; }
+    .empty { text-align: center; color: #8a87a0; padding: 28px 0; }
+
+    footer { background: #1E1A37; color: rgba(255,255,255,0.7); padding: 36px 0 24px; margin-top: 56px; }
+    footer .container { text-align: center; }
+    footer a { color: #FF9B43; text-decoration: none; }
+    .foot-links { margin-bottom: 14px; font-size: 0.88rem; }
+    .foot-links a { margin: 0 10px; }
+    .foot-bottom { font-size: 0.8rem; color: rgba(255,255,255,0.45); }
+
+    @media (max-width: 600px) {
+      header.hero h1 { font-size: 1.7rem; }
+      .compose-row { flex-direction: column; align-items: stretch; }
+      .btn-primary { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <a href="/mathgrid/" class="nav-logo">
+        <span class="logo-grid"><span>&#65291;</span><span>3</span><span>7</span><span>&#9733;</span></span>
+        Math Grid
+      </a>
+      <a href="/mathgrid/" class="nav-back">&larr; Back to Math Grid</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <span class="pill">💡 Idea Board</span>
+      <h1>Help shape Math Grid</h1>
+      <p>What would make Math Grid better for your family? Share an idea or upvote the ones you like. No account, no sign-in — just tap.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="banner" class="banner" style="display:none;"></div>
+
+    <div class="card compose">
+      <textarea id="idea" maxlength="140" placeholder="e.g. A times-table mode, dark theme, more avatars…" aria-label="Your idea"></textarea>
+      <!-- Honeypot: bots fill this; humans never see it -->
+      <input type="text" id="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" placeholder="Leave this empty">
+      <div class="compose-row">
+        <span class="counter"><span id="count">0</span>/140</span>
+        <button id="submit" class="btn-primary" disabled>Share idea</button>
+      </div>
+    </div>
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+    <p class="note">Ideas are public and shown to everyone. Please keep them kind and free of personal information. ✨</p>
+
+    <section class="ideas" id="ideas" aria-label="Ideas"></section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="foot-links">
+        <a href="/mathgrid/">Home</a>
+        <a href="/mathgrid/privacy/">Privacy</a>
+        <a href="/mathgrid/terms/">Terms</a>
+        <a href="/mathgrid/support/">Support</a>
+      </div>
+      <div class="foot-bottom">Math Grid · Emile Labs · Ideas are community suggestions and not a commitment to build.</div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       FIREBASE CONFIG — paste the WEB app config here.
+       Firebase console → Math Grid project → ⚙ Project settings →
+       Your apps → Add app → Web → register "mathgrid-web" → copy the
+       firebaseConfig object below (apiKey/authDomain/databaseURL/
+       projectId/appId). databaseURL is required (Realtime Database).
+       Until real values are pasted (placeholders contain "PASTE_"),
+       the board shows a friendly "coming soon" banner and stays inert.
+       Security rules to deploy: see ideas/SETUP.md in this repo.
+       ============================================================ -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getDatabase, ref, push, onValue, runTransaction, serverTimestamp, query, limitToLast }
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "PASTE_API_KEY",
+      authDomain: "PASTE_PROJECT.firebaseapp.com",
+      databaseURL: "https://PASTE_PROJECT-default-rtdb.firebaseio.com",
+      projectId: "PASTE_PROJECT_ID",
+      appId: "PASTE_APP_ID"
+    };
+
+    const IDEAS_PATH = "mathgrid_ideas";
+    const MAX_LEN = 140, MIN_LEN = 3;
+    const POST_COOLDOWN_MS = 45_000;     // one post per 45s per device
+    const DAILY_POST_CAP = 12;           // soft per-device daily cap
+    // Light client-side profanity gate. The real guardrails are the Realtime
+    // Database security rules + post-moderation (owner hides bad entries).
+    const BLOCKED = ["fuck","shit","bitch","cunt","asshole","nigger","faggot","slut","whore","dick","piss","bastard"];
+
+    const $ = (id) => document.getElementById(id);
+    const banner = $("banner"), statusEl = $("status"), ideasEl = $("ideas");
+    const textEl = $("idea"), submitEl = $("submit"), countEl = $("count"), honeypot = $("website");
+
+    const configured = !JSON.stringify(firebaseConfig).includes("PASTE_");
+
+    // ---- localStorage helpers (votes + rate limit; no cookies, no tracking) ----
+    const lsGet = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } };
+    const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
+    const votedIds = () => lsGet("mg_voted", []);
+    const hasVoted = (id) => votedIds().includes(id);
+    const markVoted = (id) => lsSet("mg_voted", [...votedIds(), id]);
+
+    function setStatus(msg, kind) { statusEl.textContent = msg || ""; statusEl.className = "status" + (kind ? " " + kind : ""); }
+
+    function showBanner(html) { banner.innerHTML = html; banner.style.display = "block"; }
+
+    // Character counter + enable/disable submit
+    function refreshCompose() {
+      const v = textEl.value.trim();
+      countEl.textContent = textEl.value.length;
+      submitEl.disabled = !configured || v.length < MIN_LEN;
+    }
+    textEl.addEventListener("input", refreshCompose);
+
+    function clean(text) {
+      const lower = text.toLowerCase();
+      return !BLOCKED.some(w => new RegExp(`\\b${w}`, "i").test(lower));
+    }
+
+    function rateOk() {
+      const now = Date.now();
+      const last = lsGet("mg_lastpost", 0);
+      if (now - last < POST_COOLDOWN_MS) {
+        setStatus(`Easy there — please wait a moment before posting again.`, "err"); return false;
+      }
+      const today = new Date().toISOString().slice(0,10);
+      const day = lsGet("mg_postday", { d: today, n: 0 });
+      const n = (day.d === today ? day.n : 0);
+      if (n >= DAILY_POST_CAP) { setStatus("You've shared a lot today — thank you! Try again tomorrow.", "err"); return false; }
+      return true;
+    }
+    function recordPost() {
+      const today = new Date().toISOString().slice(0,10);
+      const day = lsGet("mg_postday", { d: today, n: 0 });
+      lsSet("mg_lastpost", Date.now());
+      lsSet("mg_postday", { d: today, n: (day.d === today ? day.n : 0) + 1 });
+    }
+
+    function timeAgo(ts) {
+      if (!ts) return "";
+      const s = Math.max(1, Math.floor((Date.now() - ts) / 1000));
+      if (s < 60) return "just now";
+      const m = Math.floor(s/60); if (m < 60) return m + "m ago";
+      const h = Math.floor(m/60); if (h < 24) return h + "h ago";
+      return Math.floor(h/24) + "d ago";
+    }
+
+    function escapeHtml(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+
+    // ---- Not configured yet → friendly inert state ----
+    if (!configured) {
+      showBanner("<strong>Idea board is almost ready.</strong> The team is finishing the final connection — check back soon. (You can still see the form below.)");
+      ideasEl.innerHTML = '<div class="empty">No ideas yet — be the first once the board goes live!</div>';
+      refreshCompose();
+    } else {
+      // ---- Live (Firebase configured) ----
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+      const auth = getAuth(app);
+      signInAnonymously(auth).catch(() => {/* rules may allow unauth read; ignore */});
+
+      // Render the list, post-moderation = hide entries flagged hidden=true.
+      onValue(query(ref(db, IDEAS_PATH), limitToLast(200)), (snap) => {
+        const items = [];
+        snap.forEach(child => {
+          const v = child.val() || {};
+          if (v.hidden === true) return;
+          items.push({ id: child.key, text: v.text || "", votes: v.votes || 0, createdAt: v.createdAt || 0 });
+        });
+        items.sort((a, b) => b.votes - a.votes || b.createdAt - a.createdAt);
+        renderIdeas(items);
+      }, (err) => {
+        setStatus("Couldn't load ideas right now.", "err");
+        console.warn("ideas read failed", err);
+      });
+
+      function renderIdeas(items) {
+        if (!items.length) { ideasEl.innerHTML = '<div class="empty">No ideas yet — share the first one above! 💡</div>'; return; }
+        ideasEl.innerHTML = "";
+        for (const it of items) {
+          const voted = hasVoted(it.id);
+          const row = document.createElement("div");
+          row.className = "idea";
+          row.innerHTML =
+            `<button class="vote ${voted ? "voted" : ""}" ${voted ? "disabled" : ""} aria-label="Upvote">
+               <span class="arrow">▲</span><span class="count">${it.votes}</span>
+             </button>
+             <div class="idea-body">
+               <div class="idea-text">${escapeHtml(it.text)}</div>
+               <div class="idea-meta">${timeAgo(it.createdAt)}</div>
+             </div>`;
+          const btn = row.querySelector(".vote");
+          if (!voted) btn.addEventListener("click", () => upvote(it.id, btn));
+          ideasEl.appendChild(row);
+        }
+      }
+
+      async function upvote(id, btn) {
+        if (hasVoted(id)) return;
+        markVoted(id);                       // optimistic + prevents double-vote per device
+        btn.disabled = true; btn.classList.add("voted");
+        try {
+          await runTransaction(ref(db, `${IDEAS_PATH}/${id}/votes`), (cur) => (cur || 0) + 1);
+        } catch (e) { console.warn("vote failed", e); }
+      }
+
+      async function submitIdea() {
+        const text = textEl.value.trim();
+        if (text.length < MIN_LEN || text.length > MAX_LEN) return;
+        if (honeypot.value) { textEl.value = ""; refreshCompose(); return; }   // bot
+        if (!clean(text)) { setStatus("Let's keep it kind — please rephrase.", "err"); return; }
+        if (!rateOk()) return;
+        submitEl.disabled = true;
+        try {
+          await push(ref(db, IDEAS_PATH), { text, votes: 0, hidden: false, createdAt: serverTimestamp() });
+          recordPost();
+          textEl.value = ""; refreshCompose();
+          setStatus("Thanks! Your idea is live. 🎉", "ok");
+          setTimeout(() => setStatus(""), 4000);
+        } catch (e) {
+          console.warn("post failed", e);
+          setStatus("Couldn't post that — please try again.", "err");
+          submitEl.disabled = false;
+        }
+      }
+      submitEl.addEventListener("click", submitIdea);
+      refreshCompose();
+    }
+  </script>
+</body>
+</html>
