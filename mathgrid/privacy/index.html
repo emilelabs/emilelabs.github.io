@@ -32,9 +32,9 @@
     <div class="container">
         <a href="/mathgrid/" class="back">&larr; Math Grid</a>
         <h1>Privacy Policy</h1>
-        <p class="updated">Effective date: June 24, 2026</p>
+        <p class="updated">Effective date: July 1, 2026</p>
         <p>Emile Labs ("we", "our", or "us") operates the Math Grid mobile application (the "App"). This Privacy Policy explains how we handle information when you use our App.</p>
-        <p><strong>In short: almost everything stays on your device. The only feature that uses the internet is the optional Online Battle, which shares a player's first name, avatar emoji, and game session data (scores and room codes) to run a live match. We collect no email addresses or device identifiers, show no ads, and use no tracking.</strong></p>
+        <p><strong>In short: almost everything stays on your device. Two optional features use the internet: <strong>Online Battle</strong> (a temporary live match) and <strong>Friends</strong> (comparing star counts with friends you have both accepted). Together they share only a player's first name, avatar emoji, colour, and game/star data. We collect no email addresses, show no ads, and use no tracking.</strong></p>
 
         <h2>1. Children's Privacy</h2>
         <p>Math Grid is designed for children aged 5-7 and up and is offered in the App Store <strong>Education</strong> category. <strong>We take children's privacy very seriously.</strong></p>
@@ -42,8 +42,8 @@
             <li>We comply with the Australian Privacy Act 1988, the Children's Online Privacy Protection Act (COPPA), and applicable international children's privacy regulations.</li>
             <li>We do not require accounts, show ads, or use analytics or tracking SDKs of any kind.</li>
             <li>Player profiles use only a first name, avatar, and colour. Profiles are stored locally on the device.</li>
-            <li>The only information that ever leaves the device is during an <strong>Online Battle</strong>: the player's chosen first name and avatar emoji, plus the live match's scores and room code (see Section 3). No email, contact details, or device identifiers are collected.</li>
-            <li>Parental gates (an adult challenge) protect the parent dashboard, all purchases, external links, and sharing.</li>
+            <li>The only information that ever leaves the device is during the optional <strong>Online Battle</strong> and <strong>Friends</strong> features: a player's first name, avatar emoji, colour, and game/star data (see Sections 3 and 4). No email, contact details, or real-world identifiers are collected.</li>
+            <li>Parental gates (an adult challenge) protect the parent dashboard, all purchases, and external links.</li>
         </ul>
 
         <h2>2. Information Stored on Your Device</h2>
@@ -54,7 +54,7 @@
             <li><strong>Battle records</strong>: Results of battles, including the room codes you have entered</li>
             <li><strong>Settings</strong>: App preferences and subscription status</li>
         </ul>
-        <p>This on-device data is <strong>not transmitted to our servers</strong> — we have no servers that store it. The single exception is the live data exchanged during an Online Battle, described next.</p>
+        <p>This on-device data is <strong>not transmitted to our servers</strong> — we have no servers that store it. The only exceptions are the data exchanged during an Online Battle (Section 3) and the small record shared by the Friends feature (Section 4).</p>
 
         <h2>3. Online Battle (Multiplayer)</h2>
         <p>Online Battle is an optional feature that lets a child play the same grid against a friend in real time. To set up and run a match, the App uses <strong>Firebase Realtime Database</strong> (a Google service) to exchange:</p>
@@ -64,18 +64,30 @@
         </ul>
         <p>To keep the match room secure, the App signs in to Firebase <strong>anonymously</strong> — this creates a random, throwaway sign-in ID that holds no personal information, is not linked to your identity, and exists only so the match room is not publicly writable. Apart from this anonymous ID, no email addresses, contact details, device identifiers, or other personal information are collected or transmitted. This data is sent over encrypted connections (TLS/SSL) and is <strong>temporary</strong> — a match room and its contents are automatically removed once the match concludes. If you never start or join an Online Battle, the App makes no gameplay network connections at all.</p>
 
-        <h2>4. Information Processed by Third Parties</h2>
+        <h2>4. Friends (Optional)</h2>
+        <p>Friends is an optional feature that lets a child compare star counts with friends. A child adds a friend by sharing a 6-character friend code (out of band — there is no search or discovery of other children), and a friendship only forms after <strong>both sides accept</strong>. It uses <strong>Firebase Realtime Database</strong> (the same Google service and the same anonymous sign-in ID as Online Battle).</p>
+        <ul>
+            <li><strong>What is shared, and only with friends you have both accepted</strong>: the active profile's <strong>first name</strong>, <strong>avatar emoji</strong>, <strong>colour</strong>, and <strong>weekly and lifetime star counts</strong>. This small record is keyed to the device's anonymous Firebase sign-in ID (a random identifier that is not linked to your real identity).</li>
+            <li><strong>What is never shared</strong>: there is no chat, no free-text messaging, and nothing beyond the screened first name. No email, contact details, phone numbers, location, or real-world identifiers are ever collected or shared. The first name shown is screened for inappropriate content on both ends.</li>
+            <li><strong>Visibility</strong>: a child's record is readable only by friends they have mutually accepted. Either side can remove the friendship at any time, which deletes the shared connection for both.</li>
+            <li><strong>Deletion</strong>: you can erase your entire Friends record from inside the App at any time via <strong>Progress &rarr; Reset all progress data</strong> (behind the parent gate), which removes your shared profile, your friend connections, and your friend code.</li>
+            <li><strong>Retention</strong>: records that have been inactive for an extended period are pruned automatically.</li>
+            <li>This data is sent over encrypted connections (TLS/SSL). If you never open the Friends feature, no friends data is created or shared.</li>
+        </ul>
+
+        <h2>5. Information Processed by Third Parties</h2>
         <ul>
             <li><strong>Apple (StoreKit)</strong>: When you make a purchase, Apple processes the transaction. We do not receive or store your payment information. Purchases are protected by a parental gate within the App.</li>
-            <li><strong>Firebase (Google)</strong>: Used only for the Online Battle multiplayer feature, to exchange a first name, avatar emoji, and game session data (room code and scores) as described in Section 3.</li>
+            <li><strong>Firebase (Google)</strong>: Used only for the optional Online Battle and Friends features, to exchange a first name, avatar emoji, colour, and game/star data as described in Sections 3 and 4.</li>
         </ul>
         <p>We use <strong>no other third-party services</strong> — no analytics SDKs, no advertising networks, and no tracking of any kind.</p>
 
-        <h2>5. How We Use Information</h2>
+        <h2>6. How We Use Information</h2>
         <ul>
             <li>Provide core App functionality (profiles, grids, scores, leaderboards, heatmap, smart practice) — locally on the device</li>
             <li>Power the parent dashboard (per-operation levels, accuracy charts, tricky facts, session log) — locally on the device</li>
             <li>Run Online Battle matches between players (via Firebase, as described above)</li>
+            <li>Let mutually-accepted friends compare star counts via the Friends feature (via Firebase, as described above)</li>
             <li>Unlock features according to your subscription status (verified via Apple)</li>
         </ul>
         <p><strong>We do not:</strong></p>
@@ -86,7 +98,7 @@
             <li>Use analytics or tracking SDKs</li>
         </ul>
 
-        <h2>6. Subscriptions</h2>
+        <h2>7. Subscriptions</h2>
         <p>Math Grid offers auto-renewable subscriptions managed entirely by Apple through the App Store. We do not collect or store any payment or billing information.</p>
         <ul>
             <li><strong>Premium Monthly</strong>: $2.99/month</li>
@@ -95,35 +107,37 @@
         </ul>
         <p>Prices may vary by region based on Apple's pricing tiers. Subscriptions auto-renew unless cancelled at least 24 hours before the end of the current period. Manage subscriptions in Settings &gt; Apple ID &gt; Subscriptions.</p>
 
-        <h2>7. Data Storage and Security</h2>
+        <h2>8. Data Storage and Security</h2>
         <ul>
             <li>Profile, progress, and battle-record data is stored <strong>locally on your device</strong> in local JSON files using standard iOS storage mechanisms.</li>
             <li>Online Battle data is transmitted via Firebase using encrypted connections (TLS/SSL) and is held only for the duration of a match.</li>
+            <li>Friends data (first name, avatar, colour, star counts) is transmitted via Firebase using encrypted connections (TLS/SSL), readable only by mutually-accepted friends, deletable from inside the App, and pruned automatically after a period of inactivity.</li>
             <li>We do not operate our own external servers or databases of user personal information.</li>
         </ul>
 
-        <h2>8. Data Retention and Deletion</h2>
+        <h2>9. Data Retention and Deletion</h2>
         <ul>
             <li><strong>Local data</strong>: Deleting a profile within the App removes that profile's data. To delete all local data, simply uninstall the App.</li>
             <li><strong>Online Battle data</strong>: Match session data is temporary and is automatically deleted once the match concludes.</li>
+            <li><strong>Friends data</strong>: You can erase your entire Friends record from inside the App at any time via <strong>Progress &rarr; Reset all progress data</strong> (behind the parent gate). Inactive records are also pruned automatically.</li>
         </ul>
 
-        <h2>9. Parental Controls</h2>
+        <h2>10. Parental Controls</h2>
         <ul>
-            <li>The parent dashboard, all purchases, external links, and sharing are protected by a parental gate (an adult challenge)</li>
+            <li>The parent dashboard, all purchases, and external links are protected by a parental gate (an adult challenge)</li>
             <li>Parents can manage player profiles and per-operation difficulty levels within the App</li>
             <li>Subscription purchases additionally require Apple ID authentication (Apple's parental controls apply)</li>
             <li>No account creation or email registration is required — or even possible</li>
         </ul>
 
-        <h2>10. Third-Party Services</h2>
+        <h2>11. Third-Party Services</h2>
         <table>
             <tr><th>Service</th><th>Provider</th><th>Purpose</th></tr>
             <tr><td>App Store / StoreKit</td><td>Apple</td><td>Subscription purchases</td></tr>
-            <tr><td>Firebase Realtime Database</td><td>Google</td><td>Online Battle multiplayer (app) &amp; Idea Board (website) — see Section 11</td></tr>
+            <tr><td>Firebase Realtime Database</td><td>Google</td><td>Online Battle multiplayer &amp; Friends (app) &amp; Idea Board (website) — see Sections 3, 4 and 12</td></tr>
         </table>
 
-        <h2>11. Idea Board (Website)</h2>
+        <h2>12. Idea Board (Website)</h2>
         <p>Our website offers an optional <strong>Idea Board</strong> (at <a href="/mathgrid/ideas/">emilelabs.github.io/mathgrid/ideas</a>) where anyone can suggest features and upvote others' ideas. It is part of the <strong>website</strong>, not the App — your child does not encounter it while playing.</p>
         <ul>
             <li><strong>What's collected</strong>: only the <strong>text of an idea you choose to submit</strong>. Submissions are public — please do not include names, contact details, or other personal information.</li>
@@ -132,10 +146,10 @@
             <li><strong>No tracking, ads, or analytics.</strong> We may hide ideas that are inappropriate. To request removal of something you posted, email <a href="mailto:support@emilelabs.com">support@emilelabs.com</a>.</li>
         </ul>
 
-        <h2>12. Changes to This Policy</h2>
+        <h2>13. Changes to This Policy</h2>
         <p>We may update this Privacy Policy from time to time. We will notify users of any material changes by updating the effective date at the top of this page.</p>
 
-        <h2>13. Contact Us</h2>
+        <h2>14. Contact Us</h2>
         <p>If you have any questions about this Privacy Policy, please contact us:</p>
         <ul>
             <li><strong>Email</strong>: <a href="mailto:support@emilelabs.com">support@emilelabs.com</a></li>
