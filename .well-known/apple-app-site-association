@@ -1,0 +1,16 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["RV582NF425.com.emilelabs.mathgrid"],
+        "components": [
+          {
+            "/": "/mathgrid/friend",
+            "?": { "code": "?*" },
+            "comment": "Math Grid friend invite — opens the app to the add-a-friend flow with the code filled in"
+          }
+        ]
+      }
+    ]
+  }
+}
