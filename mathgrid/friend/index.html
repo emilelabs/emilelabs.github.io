@@ -48,8 +48,9 @@
         var raw = (params.get('code') || '').toUpperCase().replace(/[^2-9A-HJ-NP-Z]/g, '').slice(0, 6);
         if (raw) {
             document.getElementById('code').textContent = raw.split('').join(' ');
-            // Re-hitting the same universal link will open the app if installed.
-            document.getElementById('openBtn').setAttribute('href', '/mathgrid/friend?code=' + raw);
+            // Custom scheme opens the app from this page if it's installed
+            // (a same-domain universal link would not fire from Safari).
+            document.getElementById('openBtn').setAttribute('href', 'mathgrid://friend?code=' + raw);
         } else {
             document.getElementById('openBtn').style.display = 'none';
         }
