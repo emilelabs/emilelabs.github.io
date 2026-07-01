@@ -72,6 +72,7 @@
             <li><strong>Visibility</strong>: a child's record is readable only by friends they have mutually accepted. Either side can remove the friendship at any time, which deletes the shared connection for both.</li>
             <li><strong>Deletion</strong>: you can erase your entire Friends record from inside the App at any time via <strong>Progress &rarr; Reset all progress data</strong> (behind the parent gate), which removes your shared profile, your friend connections, and your friend code.</li>
             <li><strong>Retention</strong>: records that have been inactive for an extended period are pruned automatically.</li>
+            <li><strong>Notifications (optional)</strong>: if a parent turns on friend notifications, the App registers a push token (Apple Push Notification service, delivered via Firebase Cloud Messaging) stored with the anonymous Friends record. It is used <strong>only</strong> to notify the child when a friend request is received or accepted &mdash; there are no reminders and no marketing notifications. The token is deleted when you reset your data (Progress &rarr; Reset all progress data) or turn notifications off.</li>
             <li>This data is sent over encrypted connections (TLS/SSL). If you never open the Friends feature, no friends data is created or shared.</li>
         </ul>
 
