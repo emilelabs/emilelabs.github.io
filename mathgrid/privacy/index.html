@@ -32,7 +32,7 @@
     <div class="container">
         <a href="/mathgrid/" class="back">&larr; Math Grid</a>
         <h1>Privacy Policy</h1>
-        <p class="updated">Effective date: July 1, 2026</p>
+        <p class="updated">Effective date: July 2, 2026</p>
         <p>Emile Labs ("we", "our", or "us") operates the Math Grid mobile application (the "App"). This Privacy Policy explains how we handle information when you use our App.</p>
         <p><strong>In short: almost everything stays on your device. Two optional features use the internet: <strong>Online Battle</strong> (a temporary live match) and <strong>Friends</strong> (comparing star counts with friends you have both accepted). Together they share only a player's first name, avatar emoji, colour, and game/star data. We collect no email addresses, show no ads, and use no tracking.</strong></p>
 
@@ -67,11 +67,13 @@
         <h2>4. Friends (Optional)</h2>
         <p>Friends is an optional feature that lets a child compare star counts with friends. A child adds a friend by sharing a 6-character friend code (out of band — there is no search or discovery of other children), and a friendship only forms after <strong>both sides accept</strong>. It uses <strong>Firebase Realtime Database</strong> (the same Google service and the same anonymous sign-in ID as Online Battle).</p>
         <ul>
-            <li><strong>What is shared, and only with friends you have both accepted</strong>: the active profile's <strong>first name</strong>, <strong>avatar emoji</strong>, <strong>colour</strong>, and <strong>weekly and lifetime star counts</strong>. This small record is keyed to the device's anonymous Firebase sign-in ID (a random identifier that is not linked to your real identity).</li>
+            <li><strong>What is shared, and only with friends you have both accepted</strong>: the active profile's <strong>first name</strong>, <strong>avatar emoji</strong>, <strong>colour</strong>, <strong>weekly and lifetime star counts</strong>, <strong>day-streak and games-played counts</strong>, and a simple <strong>online/offline status</strong> (shown to friends as a presence dot, so a child can see who is available to play). This small record is keyed to the device's anonymous Firebase sign-in ID (a random identifier that is not linked to your real identity).</li>
             <li><strong>What is never shared</strong>: there is no chat, no free-text messaging, and nothing beyond the screened first name. No email, contact details, phone numbers, location, or real-world identifiers are ever collected or shared. The first name shown is screened for inappropriate content on both ends.</li>
             <li><strong>Visibility</strong>: a child's record is readable only by friends they have mutually accepted. Either side can remove the friendship at any time, which deletes the shared connection for both.</li>
             <li><strong>Deletion</strong>: you can erase your entire Friends record from inside the App at any time via <strong>Progress &rarr; Reset all progress data</strong> (behind the parent gate), which removes your shared profile, your friend connections, and your friend code.</li>
             <li><strong>Retention</strong>: records that have been inactive for an extended period are pruned automatically.</li>
+            <li><strong>Notifications (optional)</strong>: if a parent turns on friend notifications, the App registers a push token (Apple Push Notification service, delivered via Firebase Cloud Messaging) stored with the anonymous Friends record. It is used <strong>only</strong> to notify the child when a friend request is received or accepted &mdash; there are no reminders and no marketing notifications. The token is deleted when you reset your data (Progress &rarr; Reset all progress data) or turn notifications off.</li>
+            <li><strong>Battling a friend</strong>: a child can start an Online Battle directly with a friend who is online. This runs through the same Online Battle mechanism described in Section 3 &mdash; only a first name, avatar, and live match data are shared, in a temporary room that is deleted when the match ends.</li>
             <li>This data is sent over encrypted connections (TLS/SSL). If you never open the Friends feature, no friends data is created or shared.</li>
         </ul>
 
