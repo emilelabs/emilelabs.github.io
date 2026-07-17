@@ -32,15 +32,15 @@
     <div class="container">
         <a href="/mathgrid/" class="back">&larr; Math Grid</a>
         <h1>Privacy Policy</h1>
-        <p class="updated">Effective date: July 2, 2026</p>
+        <p class="updated">Effective date: July 17, 2026</p>
         <p>Emile Labs ("we", "our", or "us") operates the Math Grid mobile application (the "App"). This Privacy Policy explains how we handle information when you use our App.</p>
-        <p><strong>In short: almost everything stays on your device. Two optional features use the internet: <strong>Online Battle</strong> (a temporary live match) and <strong>Friends</strong> (comparing star counts with friends you have both accepted). Together they share only a player's first name, avatar emoji, colour, and game/star data. We collect no email addresses, show no ads, and use no tracking.</strong></p>
+        <p><strong>In short: almost everything stays on your device. Two optional features use the internet: <strong>Online Battle</strong> (a temporary live match) and <strong>Friends</strong> (comparing star counts with friends you have both accepted). Together they share only a player's first name, avatar emoji, colour, and game/star data. We collect no email addresses, show no ads, and use no tracking. The App also gathers a small set of <strong>anonymous usage statistics</strong> (which features are used — never names or content) to help us improve it; you can switch this off in Settings.</strong></p>
 
         <h2>1. Children's Privacy</h2>
         <p>Math Grid is designed for children aged 5-7 and up and is offered in the App Store <strong>Education</strong> category. <strong>We take children's privacy very seriously.</strong></p>
         <ul>
             <li>We comply with the Australian Privacy Act 1988, the Children's Online Privacy Protection Act (COPPA), and applicable international children's privacy regulations.</li>
-            <li>We do not require accounts, show ads, or use analytics or tracking SDKs of any kind.</li>
+            <li>We do not require accounts, show ads, or use tracking of any kind. The App's usage statistics are fully anonymous — they can never identify a child (see Section 5) — and can be turned off in Settings.</li>
             <li>Player profiles use only a first name, avatar, and colour. Profiles are stored locally on the device.</li>
             <li>The only information that ever leaves the device is during the optional <strong>Online Battle</strong> and <strong>Friends</strong> features: a player's first name, avatar emoji, colour, and game/star data (see Sections 3 and 4). No email, contact details, or real-world identifiers are collected.</li>
             <li>Parental gates (an adult challenge) protect the parent dashboard, all purchases, and external links.</li>
@@ -81,8 +81,9 @@
         <ul>
             <li><strong>Apple (StoreKit)</strong>: When you make a purchase, Apple processes the transaction. We do not receive or store your payment information. Purchases are protected by a parental gate within the App.</li>
             <li><strong>Firebase (Google)</strong>: Used only for the optional Online Battle and Friends features, to exchange a first name, avatar emoji, colour, and game/star data as described in Sections 3 and 4.</li>
+            <li><strong>PostHog (anonymous usage statistics)</strong>: From version 1.4, the App sends a small, fixed set of <strong>anonymous</strong> usage events (for example "a grid was completed" or "the paywall was shown") to PostHog, a US-hosted analytics processor, so we can understand which features help children practise and improve the App. These events contain <strong>no names, no free text, and no personal information</strong> — only feature identifiers and numbers (such as grid size, duration, and star count). They are keyed to a <strong>random app-scoped identifier</strong> generated on the device (not your Apple ID, not an advertising identifier, and not linked to your identity); person profiles and session recording are disabled, and the client IP address is discarded at ingestion. You can turn usage statistics <strong>off at any time</strong> in Settings &rarr; "Share Anonymous Usage Data".</li>
         </ul>
-        <p>We use <strong>no other third-party services</strong> — no analytics SDKs, no advertising networks, and no tracking of any kind.</p>
+        <p>We use <strong>no other third-party services</strong> — no advertising networks and no tracking of any kind.</p>
 
         <h2>6. How We Use Information</h2>
         <ul>
@@ -97,7 +98,7 @@
             <li>Sell, rent, or share personal information with third parties</li>
             <li>Use data for advertising or marketing purposes</li>
             <li>Track users across apps or websites</li>
-            <li>Use analytics or tracking SDKs</li>
+            <li>Use advertising SDKs of any kind (our usage statistics are anonymous, cannot identify anyone, and can be switched off in Settings)</li>
         </ul>
 
         <h2>7. Subscriptions</h2>
@@ -114,6 +115,7 @@
             <li>Profile, progress, and battle-record data is stored <strong>locally on your device</strong> in local JSON files using standard iOS storage mechanisms.</li>
             <li>Online Battle data is transmitted via Firebase using encrypted connections (TLS/SSL) and is held only for the duration of a match.</li>
             <li>Friends data (first name, avatar, colour, star counts) is transmitted via Firebase using encrypted connections (TLS/SSL), readable only by mutually-accepted friends, deletable from inside the App, and pruned automatically after a period of inactivity.</li>
+            <li>Anonymous usage events are transmitted to PostHog (US) over encrypted connections (TLS/SSL); they contain no personal information.</li>
             <li>We do not operate our own external servers or databases of user personal information.</li>
         </ul>
 
@@ -122,6 +124,7 @@
             <li><strong>Local data</strong>: Deleting a profile within the App removes that profile's data. To delete all local data, simply uninstall the App.</li>
             <li><strong>Online Battle data</strong>: Match session data is temporary and is automatically deleted once the match concludes.</li>
             <li><strong>Friends data</strong>: You can erase your entire Friends record from inside the App at any time via <strong>Progress &rarr; Reset all progress data</strong> (behind the parent gate). Inactive records are also pruned automatically.</li>
+            <li><strong>Usage statistics</strong>: Anonymous events cannot be traced back to a person. Turning off <strong>Share Anonymous Usage Data</strong> in Settings stops collection immediately; deleting the App resets the random identifier.</li>
         </ul>
 
         <h2>10. Parental Controls</h2>
@@ -137,6 +140,7 @@
             <tr><th>Service</th><th>Provider</th><th>Purpose</th></tr>
             <tr><td>App Store / StoreKit</td><td>Apple</td><td>Subscription purchases</td></tr>
             <tr><td>Firebase Realtime Database</td><td>Google</td><td>Online Battle multiplayer &amp; Friends (app) &amp; Idea Board (website) — see Sections 3, 4 and 12</td></tr>
+            <tr><td>PostHog</td><td>PostHog Inc.</td><td>Anonymous usage statistics (app, optional) — see Section 5</td></tr>
         </table>
 
         <h2>12. Idea Board (Website)</h2>
